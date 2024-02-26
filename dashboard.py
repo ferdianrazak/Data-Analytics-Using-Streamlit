@@ -13,8 +13,9 @@ st.sidebar.markdown(
     "**• Dicoding: [ferdianrazak](https://www.dicoding.com/users/ferdianrazak/)**")
 
 def create_season_rent_df(df):
+    order_musim = ['Semi', 'Dingin', 'Panas', 'Gugur']
+    df['Musim'] = pd.Categorical(df['Musim'], categories=order_musim, ordered=True)
     season_rent_df = df.groupby(by='Musim')[['Member', 'Non-member']].sum().reset_index()
-    
     return season_rent_df
 
 def create_monthly_rent_df(df, year):
