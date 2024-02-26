@@ -47,9 +47,7 @@ def create_weekday_rent_df(df):
     return weekday_rent_df
     
 def create_weather_rent_df(df):
-    weather_rent_df = df.groupby(by='Cuaca').agg({
-        'Total_Sewa': 'sum'
-    })
+    weather_rent_df = df.groupby(by='Cuaca')[['Member', 'Non-member']].sum().reset_index()
     return weather_rent_df
     
 # Membuat komponen filter
