@@ -113,7 +113,7 @@ sns.barplot(
 sns.barplot(
     x='Cuaca',
     y='Non-member',
-    data=season_rent_df,
+    data=weather_rent_df,
     label='Non-member',
     ax=ax
 )
