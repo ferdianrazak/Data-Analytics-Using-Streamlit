@@ -14,7 +14,7 @@ st.sidebar.markdown(
 
 def create_season_rent_df(df):
     season_rent_df = df.groupby(by='Musim')[['Member', 'Non-member']].sum().reset_index()
-
+    
     return season_rent_df
 
 def create_monthly_rent_df(df, year):
@@ -28,6 +28,8 @@ def create_monthly_rent_df(df, year):
     
 def create_weather_rent_df(df):
     weather_rent_df = df.groupby(by='Cuaca')[['Member', 'Non-member']].sum().reset_index()
+    order_cuaca = ['Salju Ringan/Hujan', 'Berkabut/Berawan', 'Cerah/Sebagian Berawan']
+    weather_rent_df = weather_rent_df.reindex(order_cuaca, fill_value=0)
     return weather_rent_df
    
 # Membuat komponen filter
