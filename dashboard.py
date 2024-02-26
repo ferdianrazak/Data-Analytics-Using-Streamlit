@@ -12,10 +12,6 @@ st.sidebar.markdown(
 st.sidebar.markdown(
     "**• Dicoding: [ferdianrazak](https://www.dicoding.com/users/ferdianrazak/)**")
 
-st.set_page_config(page_title="Capital Bikeshare: Bike-sharing Dashboard",
-                   page_icon="bar_chart:",
-                   layout="wide")
-
 def create_daily_rent_df(df):
     daily_rent_df = df.groupby(by='dateday').agg({
         'count': 'sum'
@@ -23,53 +19,40 @@ def create_daily_rent_df(df):
     return daily_rent_df
 
 def create_daily_casual_rent_df(df):
-    daily_casual_rent_df = df.groupby(by='dateday').agg({
-        'casual': 'sum'
+    daily_casual_rent_df = df.groupby(by='Tanggal').agg({
+        'Non-member	': 'sum'
     }).reset_index()
     return daily_casual_rent_df
 
 def create_daily_registered_rent_df(df):
-    daily_registered_rent_df = df.groupby(by='dateday').agg({
-        'registered': 'sum'
+    daily_registered_rent_df = df.groupby(by='Tanggal').agg({
+        'Member': 'sum'
     }).reset_index()
     return daily_registered_rent_df
     
 def create_season_rent_df(df):
-    season_rent_df = df.groupby(by='season')[['registered', 'casual']].sum().reset_index()
+    season_rent_df = df.groupby(by='Musim')[['Member', 'Non-member']].sum().reset_index()
     return season_rent_df
 
 def create_monthly_rent_df(df):
-    monthly_rent_df = df.groupby(by='month').agg({
-        'count': 'sum'
+    monthly_rent_df = df.groupby(by='Bulan').agg({
+        'Total_Sewa': 'sum'
     })
-    ordered_months = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    order_bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 
+                'September', 'Oktober', 'November', 'Desember']'
     ]
-    monthly_rent_df = monthly_rent_df.reindex(ordered_months, fill_value=0)
+    monthly_rent_df = monthly_rent_df.reindex(order_bulan, fill_value=0)
     return monthly_rent_df
 
 def create_weekday_rent_df(df):
-    weekday_rent_df = df.groupby(by='weekday').agg({
-        'count': 'sum'
+    weekday_rent_df = df.groupby(by='Hari').agg({
+        'Total_Sewa': 'sum'
     }).reset_index()
     return weekday_rent_df
-
-def create_workingday_rent_df(df):
-    workingday_rent_df = df.groupby(by='workingday').agg({
-        'count': 'sum'
-    }).reset_index()
-    return workingday_rent_df
-
-def create_holiday_rent_df(df):
-    holiday_rent_df = df.groupby(by='holiday').agg({
-        'count': 'sum'
-    }).reset_index()
-    return holiday_rent_df
-
+    
 def create_weather_rent_df(df):
-    weather_rent_df = df.groupby(by='weather_cond').agg({
-        'count': 'sum'
+    weather_rent_df = df.groupby(by='Cuaca').agg({
+        'Total_Sewa': 'sum'
     })
     return weather_rent_df
 
