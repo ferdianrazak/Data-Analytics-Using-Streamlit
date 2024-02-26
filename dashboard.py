@@ -67,8 +67,6 @@ sns.barplot(x='Cuaca', y='Non-member', data=cuaca_df,
 for index, row in cuaca_df.iterrows():
     ax.text(index, row['Member'], str(row['Member']), ha='center', va='bottom', fontsize=12)
     ax.text(index, row['Non-member'], str(row['Non-member']), ha='center', va='bottom', fontsize=12)
-ax.set_xlabel(None)
-ax.set_ylabel(None)
 ax.tick_params(axis='x', labelsize=15)
 ax.tick_params(axis='y', labelsize=15)
 ax.legend()
