@@ -69,7 +69,6 @@ daily_rent_df = create_daily_rent_df(main_df)
 daily_casual_rent_df = create_daily_casual_rent_df(main_df)
 daily_registered_rent_df = create_daily_registered_rent_df(main_df)
 season_rent_df = create_season_rent_df(main_df)
-monthly_rent_df = create_monthly_rent_df(main_df)
 weekday_rent_df = create_weekday_rent_df(main_df)
 weather_rent_df = create_weather_rent_df(main_df)
 
