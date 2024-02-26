@@ -105,7 +105,7 @@ fig, ax = plt.subplots(figsize=(16, 8))
 sns.barplot(
     x='Cuaca',
     y='Member',
-    data=season_rent_df,
+    data=weather_rent_df,
     label='Member',
     ax=ax
 )
@@ -118,7 +118,7 @@ sns.barplot(
     ax=ax
 )
 
-for index, row in season_rent_df.iterrows():
+for index, row in weather_rent_df.iterrows():
     ax.text(index, row['Member'], str(row['Member']), ha='center', va='bottom', fontsize=12)
     ax.text(index, row['Non-member'], str(row['Non-member']), ha='center', va='bottom', fontsize=12)
 
