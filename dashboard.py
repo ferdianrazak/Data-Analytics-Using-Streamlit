@@ -103,6 +103,7 @@ st.subheader('Weatherly Rentals')
 order_cuaca = ['Salju Ringan/Hujan', 'Berkabut/Berawan', 'Cerah/Sebagian Berawan']
 df['Cuaca'] = pd.Categorical(df['Cuaca'], categories=order_cuaca, ordered=True)
 df = df.sort_values('Cuaca')
+order_cuaca = df.groupby('Cuaca')[['Member', 'Non-member']].sum().reset_index()
 fig, ax = plt.subplots(figsize=(16, 8))
 
 colors=["tab:blue", "tab:orange", "tab:green"]
