@@ -176,14 +176,6 @@ ax.tick_params(axis='x', labelsize=20)
 ax.tick_params(axis='y', labelsize=15)
 st.pyplot(fig)
 
-# Membuat jumlah penyewaan berdasarkan weekday, working dan holiday
-# Berdasarkan weekday
-sns.barplot(
-  x='Hari',
-  y='Total_Sewa',
-  data=weekday_rent_df,
-  ax=axes[2])
-
 for index, row in enumerate(weekday_rent_df['Total_Sewa']):
     axes[2].text(index, row + 1, str(row), ha='center', va='bottom', fontsize=12)
 
