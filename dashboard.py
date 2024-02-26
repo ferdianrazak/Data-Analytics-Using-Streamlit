@@ -100,6 +100,13 @@ st.pyplot(fig)
 
 # Membuah jumlah penyewaan berdasarkan kondisi cuaca
 st.subheader('Weatherly Rentals')
+fig1 = px.bar(seasonly_users_df,
+              x='Cuaca',
+              y=['Salju Ringan/Hujan', 'Berkabut/Berawan', 'Cerah/Sebagian Berawan'],
+              color='type_of_rides',
+              color_discrete_sequence=["skyblue", "orange", "red"],
+              title='Count of bikeshare rides by season').update_layout(xaxis_title='', yaxis_title='Total Rides')
+
 order_cuaca = ['Salju Ringan/Hujan', 'Berkabut/Berawan', 'Cerah/Sebagian Berawan']
 df['Cuaca'] = pd.Categorical(df['Cuaca'], categories=order_cuaca, ordered=True)
 df = df.sort_values('Cuaca')
