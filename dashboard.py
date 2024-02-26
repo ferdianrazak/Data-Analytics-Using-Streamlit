@@ -78,23 +78,7 @@ weather_rent_df = create_weather_rent_df(main_df)
 # Membuat Dashboard secara lengkap
 
 # Membuat judul
-st.header('Bike Rental Dashboard 🚲')
-
-# Membuat jumlah penyewaan harian
-st.subheader('Daily Rentals')
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    daily_rent_casual = daily_casual_rent_df['Non-member'].sum()
-    st.metric('Casual User', value= daily_rent_casual)
-
-with col2:
-    daily_rent_registered = daily_registered_rent_df['Member'].sum()
-    st.metric('Registered User', value= daily_rent_registered)
- 
-with col3:
-    daily_rent_total = daily_rent_df['Total_Sewa'].sum()
-    st.metric('Total User', value= daily_rent_total)
+st.header('Final Project Data Analytics - Bike Sharing Dataset')
 
 # Membuat jumlah penyewaan bulanan
 st.subheader('Monthly Rentals')
@@ -116,7 +100,9 @@ st.pyplot(fig)
 
 # Membuat jumlah penyewaan berdasarkan season
 st.subheader('Seasonly Rentals')
-
+order_cuaca = ['Salju Ringan/Hujan', 'Berkabut/Berawan', 'Cerah/Sebagian Berawan']
+df['Cuaca'] = pd.Categorical(df['Cuaca'], categories=order_cuaca, ordered=True)
+df = df.sort_values('Cuaca')
 fig, ax = plt.subplots(figsize=(16, 8))
 
 sns.barplot(
@@ -124,7 +110,6 @@ sns.barplot(
     y='Member',
     data=season_rent_df,
     label='Member',
-    color='tab:blue',
     ax=ax
 )
 
@@ -133,7 +118,6 @@ sns.barplot(
     y='Non-member',
     data=season_rent_df,
     label='Non-member',
-    color='tab:orange',
     ax=ax
 )
 
