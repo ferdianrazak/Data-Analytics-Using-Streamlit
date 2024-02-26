@@ -12,6 +12,9 @@ st.sidebar.markdown(
 st.sidebar.markdown(
     "**• Dicoding: [ferdianrazak](https://www.dicoding.com/users/ferdianrazak/)**")
 
+df['Tahun'] = df['Tanggal'].dt.year
+df['Bulan'] = df['Tanggal'].dt.month
+
 def create_daily_rent_df(df):
     daily_rent_df = df.groupby(by='Tanggal').agg({
         'Total_Sewa': 'sum'
@@ -72,6 +75,7 @@ monthly_rent_df = create_monthly_rent_df(main_df)
 weekday_rent_df = create_weekday_rent_df(main_df)
 weather_rent_df = create_weather_rent_df(main_df)
 
+monthly_rent_df = monthly_rent_df.transpose()
 monthly_rent_df['Total_Sewa_2011'] = monthly_rent_df[2011]
 monthly_rent_df['Total_Sewa_2012'] = monthly_rent_df[2012]
 
