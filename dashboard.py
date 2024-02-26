@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import plotly.express as px
 import streamlit as st
 
 df = pd.read_csv("dashboard/main_data.csv")
@@ -120,6 +119,26 @@ plt.ylabel("Total Sewa")
 plt.title("Hubungan antara cuaca dan jumlah sewa")
 plt.legend()
 plt.show()
+
+fig, ax = plt.subplots(figsize=(16, 8))
+
+colors=["tab:blue", "tab:orange", "tab:green"]
+
+sns.barplot(
+    x=weather_rent_df.index,
+    y=weather_rent_df['Total_Sewa'],
+    palette=colors,
+    ax=ax
+)
+
+for index, row in enumerate(weather_rent_df['Total_Sewa']):
+    ax.text(index, row + 1, str(row), ha='center', va='bottom', fontsize=12)
+
+ax.set_xlabel(None)
+ax.set_ylabel(None)
+ax.tick_params(axis='x', labelsize=20)
+ax.tick_params(axis='y', labelsize=15)
+st.pyplot(fig)
 
 # Membuat jumlah penyewaan berdasarkan musim
 st.subheader('Seasonly Rentals')
