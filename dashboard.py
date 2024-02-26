@@ -32,8 +32,9 @@ def create_season_rent_df(df):
     season_rent_df = df.groupby(by='Musim')[['Member', 'Non-member']].sum().reset_index()
     return season_rent_df
 
-def create_monthly_rent_df(df):
-    monthly_rent_df = df.groupby(by=['Bulan', 'Tahun']).agg({'Total_Sewa': 'sum'})
+def create_monthly_rent_df(df, year):
+    df_year = df[df['Tahun'] == year]
+    monthly_rent_df = df_year.groupby(by='Bulan').agg({'Total_Sewa': 'sum'})
     order_bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 
                 'September', 'Oktober', 'November', 'Desember'
     ]
