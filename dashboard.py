@@ -33,7 +33,7 @@ def create_season_rent_df(df):
     return season_rent_df
 
 def create_monthly_rent_df(df):
-    monthly_rent_df = df.groupby(by='Bulan','Tahun').agg({'Total_Sewa': 'sum'})
+    monthly_rent_df = df.groupby(by=['Bulan','Tahun']).agg({'Total_Sewa': 'sum'})
     order_bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 
                 'September', 'Oktober', 'November', 'Desember'
     ]
