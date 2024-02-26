@@ -46,7 +46,7 @@ st.header('Final Project Data Analytics - Bike Sharing Dataset')
 st.subheader('Tren jumlah pengguna per bulan pada 2011 dan 2012')
 fig, ax = plt.subplots(figsize=(24, 8))
 ax.plot(monthly_rent_df_2011.index, monthly_rent_df_2011['Total_Sewa'],
-        linewidth=2, color='tab:blue', label='2011')
+        marker='o', linewidth=2, color='tab:blue', label='2011')
 ax.plot(monthly_rent_df_2012.index, monthly_rent_df_2012['Total_Sewa'],
         linewidth=2, color='tab:orange', label='2012')
 for index, value in enumerate(monthly_rent_df_2011['Total_Sewa']):
