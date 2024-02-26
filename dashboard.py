@@ -39,7 +39,7 @@ def create_monthly_rent_df(df):
         'Total_Sewa': 'sum'
     })
     order_bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 
-                'September', 'Oktober', 'November', 'Desember']'
+                'September', 'Oktober', 'November', 'Desember'
     ]
     monthly_rent_df = monthly_rent_df.reindex(order_bulan, fill_value=0)
     return monthly_rent_df
