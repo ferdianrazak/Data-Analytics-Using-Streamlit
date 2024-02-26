@@ -72,8 +72,8 @@ with st.sidebar:
         value=[min_date, max_date]
     )
 
-main_df = day_df[(df ['dateday'] >= str(start_date)) & 
-                (df ['dateday'] <= str(end_date))]
+main_df = df [(df ['Tanggal'] >= str(start_date)) & 
+                (df ['Tanggal'] <= str(end_date))]
 
 # Menyiapkan berbagai dataframe
 daily_rent_df = create_daily_rent_df(main_df)
@@ -97,15 +97,15 @@ st.subheader('Daily Rentals')
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    daily_rent_casual = daily_casual_rent_df['casual'].sum()
+    daily_rent_casual = daily_casual_rent_df['Non-member'].sum()
     st.metric('Casual User', value= daily_rent_casual)
 
 with col2:
-    daily_rent_registered = daily_registered_rent_df['registered'].sum()
+    daily_rent_registered = daily_registered_rent_df['Member'].sum()
     st.metric('Registered User', value= daily_rent_registered)
  
 with col3:
-    daily_rent_total = daily_rent_df['count'].sum()
+    daily_rent_total = daily_rent_df['Total_Sewa'].sum()
     st.metric('Total User', value= daily_rent_total)
 
 # Membuat jumlah penyewaan bulanan
@@ -119,7 +119,7 @@ ax.plot(
     color='tab:blue'
 )
 
-for index, row in enumerate(monthly_rent_df['count']):
+for index, row in enumerate(monthly_rent_df['Total_Sewa']):
     ax.text(index, row + 1, str(row), ha='center', va='bottom', fontsize=12)
 
 ax.tick_params(axis='x', labelsize=25, rotation=45)
@@ -132,26 +132,26 @@ st.subheader('Seasonly Rentals')
 fig, ax = plt.subplots(figsize=(16, 8))
 
 sns.barplot(
-    x='season',
-    y='registered',
+    x='Musim',
+    y='Member',
     data=season_rent_df,
-    label='Registered',
+    label='Member',
     color='tab:blue',
     ax=ax
 )
 
 sns.barplot(
-    x='season',
-    y='casual',
+    x='Musim',
+    y='Non-member',
     data=season_rent_df,
-    label='Casual',
+    label='Non-member',
     color='tab:orange',
     ax=ax
 )
 
 for index, row in season_rent_df.iterrows():
-    ax.text(index, row['registered'], str(row['registered']), ha='center', va='bottom', fontsize=12)
-    ax.text(index, row['casual'], str(row['casual']), ha='center', va='bottom', fontsize=12)
+    ax.text(index, row['Member'], str(row['Member']), ha='center', va='bottom', fontsize=12)
+    ax.text(index, row['Non-member'], str(row['Non-member']), ha='center', va='bottom', fontsize=12)
 
 ax.set_xlabel(None)
 ax.set_ylabel(None)
@@ -169,7 +169,7 @@ colors=["tab:blue", "tab:orange", "tab:green"]
 
 sns.barplot(
     x=weather_rent_df.index,
-    y=weather_rent_df['count'],
+    y=weather_rent_df['Total_Sewa'],
     palette=colors,
     ax=ax
 )
@@ -184,46 +184,6 @@ ax.tick_params(axis='y', labelsize=15)
 st.pyplot(fig)
 
 # Membuat jumlah penyewaan berdasarkan weekday, working dan holiday
-st.subheader('Weekday, Workingday, and Holiday Rentals')
-
-fig, axes = plt.subplots(nrows=3, ncols=1, figsize=(15,10))
-
-colors1=["tab:blue", "tab:orange"]
-colors2=["tab:blue", "tab:orange"]
-colors3=["tab:blue", "tab:orange", "tab:green", "tab:red", "tab:purple", "tab:brown", "tab:pink"]
-
-# Berdasarkan workingday
-sns.barplot(
-    x='workingday',
-    y='count',
-    data=workingday_rent_df,
-    palette=colors1,
-    ax=axes[0])
-
-for index, row in enumerate(workingday_rent_df['count']):
-    axes[0].text(index, row + 1, str(row), ha='center', va='bottom', fontsize=12)
-
-axes[0].set_title('Number of Rents based on Working Day')
-axes[0].set_ylabel(None)
-axes[0].tick_params(axis='x', labelsize=15)
-axes[0].tick_params(axis='y', labelsize=10)
-
-# Berdasarkan holiday
-sns.barplot(
-  x='holiday',
-  y='count',
-  data=holiday_rent_df,
-  palette=colors2,
-  ax=axes[1])
-
-for index, row in enumerate(holiday_rent_df['count']):
-    axes[1].text(index, row + 1, str(row), ha='center', va='bottom', fontsize=12)
-
-axes[1].set_title('Number of Rents based on Holiday')
-axes[1].set_ylabel(None)
-axes[1].tick_params(axis='x', labelsize=15)
-axes[1].tick_params(axis='y', labelsize=10)
-
 # Berdasarkan weekday
 sns.barplot(
   x='weekday',
