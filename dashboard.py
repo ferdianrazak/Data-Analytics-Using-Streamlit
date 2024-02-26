@@ -51,6 +51,9 @@ def create_weather_rent_df(df):
         'Total_Sewa': 'sum'
     })
     return weather_rent_df
+# Membuat komponen filter
+min_date = pd.to_datetime(df ['Tanggal']).dt.date.min()
+max_date = pd.to_datetime(df ['Tanggal']).dt.date.max()
 
 start_date, end_date = st.date_input(
         label='Rentang Waktu',
