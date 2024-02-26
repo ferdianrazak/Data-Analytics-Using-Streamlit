@@ -33,7 +33,7 @@ def create_season_rent_df(df):
     return season_rent_df
 
 def create_monthly_rent_df(df):
-    monthly_rent_df = df.groupby(by='Bulan').agg({'Total_Sewa': 'sum'})
+    monthly_rent_df = df.groupby(by=['Tahun', 'Bulan']).agg({'Total_Sewa': 'sum'})
     order_bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 
                 'September', 'Oktober', 'November', 'Desember'
     ]
@@ -72,6 +72,8 @@ monthly_rent_df = create_monthly_rent_df(main_df)
 weekday_rent_df = create_weekday_rent_df(main_df)
 weather_rent_df = create_weather_rent_df(main_df)
 
+monthly_rent_df['Total_Sewa_2011'] = monthly_rent_df[2011]
+monthly_rent_df['Total_Sewa_2012'] = monthly_rent_df[2012]
 
 # Membuat Dashboard secara lengkap
 
@@ -81,20 +83,38 @@ st.header('Final Project Data Analytics - Bike Sharing Dataset')
 # Membuat jumlah penyewaan bulanan
 st.subheader('Tren jumlah pengguna perbulan pada 2011 dan 2012')
 fig, ax = plt.subplots(figsize=(24, 8))
+# Garis untuk tahun 2011
 ax.plot(
     monthly_rent_df.index,
-    monthly_rent_df['Total_Sewa'],
+    monthly_rent_df['Total_Sewa_2011'],
     marker='o', 
     linewidth=2,
-    color='tab:blue'
+    color='tab:blue',
+    label='2011'  # Label untuk legenda
+)
+# Garis untuk tahun 2012
+ax.plot(
+    monthly_rent_df.index,
+    monthly_rent_df['Total_Sewa_2012'],
+    marker='o', 
+    linewidth=2,
+    color='tab:red',
+    label='2012'  # Label untuk legenda
 )
 
-for index, row in enumerate(monthly_rent_df['Total_Sewa']):
-    ax.text(index, row + 1, str(row), ha='center', va='bottom', fontsize=12)
+# Tambahkan teks jumlah sewa untuk setiap bulan untuk kedua tahun
+for index, (sewa2011, sewa2012) in enumerate(zip(monthly_rent_df['Total_Sewa_2011'], monthly_rent_df['Total_Sewa_2012'])):
+    ax.text(index, sewa2011 + 1, str(sewa2011), ha='center', va='bottom', fontsize=12, color='blue')
+    ax.text(index, sewa2012 + 1, str(sewa2012), ha='center', va='bottom', fontsize=12, color='red')
 
+# Pengaturan untuk sumbu x dan y
 ax.tick_params(axis='x', labelsize=25, rotation=45)
 ax.tick_params(axis='y', labelsize=20)
+
+# Menambahkan legenda untuk membedakan antara data tahun 2011 dan 2012
 ax.legend(fontsize=20)
+
+# Tampilkan plot
 st.pyplot(fig)
 
 # Membuah jumlah penyewaan berdasarkan kondisi cuaca
