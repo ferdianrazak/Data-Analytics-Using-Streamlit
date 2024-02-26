@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 
-df = pd.read_csv("https://github.com/ferdianrazak/dashboard/blob/main/dashboard/main_data.csv")
+df = pd.read_csv("dashboard/main_data.csv")
 st.sidebar.title("Information:")
 st.sidebar.markdown("**• Nama: Ferdian Razak**")
 st.sidebar.markdown(
