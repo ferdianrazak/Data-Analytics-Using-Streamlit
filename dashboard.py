@@ -33,7 +33,8 @@ def create_season_rent_df(df):
     return season_rent_df
 
 def create_monthly_rent_df(df):
-    monthly_rent_df = df.groupby(by='Bulan').agg({'Total_Sewa': 'sum'})
+    df_year = df[df['Tahun'] == year]
+    monthly_rent_df = df_year.groupby(by='Bulan').agg({'Total_Sewa': 'sum'})
     order_bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 
                 'September', 'Oktober', 'November', 'Desember'
     ]
@@ -78,24 +79,45 @@ weather_rent_df = create_weather_rent_df(main_df)
 st.header('Final Project Data Analytics - Bike Sharing Dataset')
 
 # Membuat jumlah penyewaan bulanan
-
-st.subheader('Tren jumlah pengguna perbulan pada 2011 dan 2012')
+monthly_rent_df_2011 = create_monthly_rent_df(df, 2011)
+monthly_rent_df_2012 = create_monthly_rent_df(df, 2012)
+st.subheader('Tren jumlah pengguna per bulan pada 2011 dan 2012')
 fig, ax = plt.subplots(figsize=(24, 8))
+
+# Plot for 2011
 ax.plot(
-    monthly_rent_df.index,
-    monthly_rent_df['Total_Sewa'],
-    marker='o', 
+    monthly_rent_df_2011.index,
+    monthly_rent_df_2011['Total_Sewa'],
+    marker='o',
     linewidth=2,
-    color='tab:blue'
+    color='tab:blue',
+    label='2011'  # Label for the legend
 )
 
-for index, row in enumerate(monthly_rent_df['Total_Sewa']):
-    ax.text(index, row + 1, str(row), ha='center', va='bottom', fontsize=12)
+# Plot for 2012
+ax.plot(
+    monthly_rent_df_2012.index,
+    monthly_rent_df_2012['Total_Sewa'],
+    marker='o',
+    linewidth=2,
+    color='tab:orange',
+    label='2012'  # Label for the legend
+)
 
+# Annotations for 2011
+for index, value in enumerate(monthly_rent_df_2011['Total_Sewa']):
+    ax.text(index, value, str(value), ha='center', va='bottom', fontsize=12)
+
+# Annotations for 2012
+for index, value in enumerate(monthly_rent_df_2012['Total_Sewa']):
+    ax.text(index, value, str(value), ha='center', va='bottom', fontsize=12)
+
+# Improve the formatting
 ax.tick_params(axis='x', labelsize=25, rotation=45)
 ax.tick_params(axis='y', labelsize=20)
-st.pyplot(fig)
+ax.legend()  # Display the legend
 
+st.pyplot(fig)
 # Membuah jumlah penyewaan berdasarkan kondisi cuaca
 st.subheader('Jumlah sewa berkaitan dengan cuaca')
 fig, ax = plt.subplots(figsize=(16, 8))
