@@ -33,7 +33,7 @@ def create_season_rent_df(df):
     return season_rent_df
 
 def create_monthly_rent_df(df):
-    monthly_rent_df = df.groupby(by='Bulan').agg({'Total_Sewa': 'sum'})
+    monthly_rent_df = df.groupby(by='Bulan','Tahun').agg({'Total_Sewa': 'sum'})
     order_bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 
                 'September', 'Oktober', 'November', 'Desember'
     ]
@@ -49,7 +49,7 @@ def create_weekday_rent_df(df):
 def create_weather_rent_df(df):
     weather_rent_df = df.groupby(by='Cuaca')[['Member', 'Non-member']].sum().reset_index()
     return weather_rent_df
-    
+   
 # Membuat komponen filter
 min_date = pd.to_datetime(df ['Tanggal']).dt.date.min()
 max_date = pd.to_datetime(df ['Tanggal']).dt.date.max()
@@ -79,7 +79,7 @@ weather_rent_df = create_weather_rent_df(main_df)
 st.header('Final Project Data Analytics - Bike Sharing Dataset')
 
 # Membuat jumlah penyewaan bulanan
-st.subheader('Monthly Rentals')
+st.subheader('Tren jumlah pengguna perbulan pada 2011 dan 2012')
 fig, ax = plt.subplots(figsize=(24, 8))
 ax.plot(
     monthly_rent_df.index,
@@ -94,6 +94,7 @@ for index, row in enumerate(monthly_rent_df['Total_Sewa']):
 
 ax.tick_params(axis='x', labelsize=25, rotation=45)
 ax.tick_params(axis='y', labelsize=20)
+ax.legend(fontsize=20)
 st.pyplot(fig)
 
 # Membuah jumlah penyewaan berdasarkan kondisi cuaca
