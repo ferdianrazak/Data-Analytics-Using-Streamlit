@@ -169,7 +169,7 @@ sns.barplot(
     ax=ax
 )
 
-for index, row in enumerate(weather_rent_df['count']):
+for index, row in enumerate(weather_rent_df['Total_Sewa']):
     ax.text(index, row + 1, str(row), ha='center', va='bottom', fontsize=12)
 
 ax.set_xlabel(None)
@@ -181,13 +181,13 @@ st.pyplot(fig)
 # Membuat jumlah penyewaan berdasarkan weekday, working dan holiday
 # Berdasarkan weekday
 sns.barplot(
-  x='weekday',
-  y='count',
+  x='Hari',
+  y='Total_Sewa',
   data=weekday_rent_df,
   palette=colors3,
   ax=axes[2])
 
-for index, row in enumerate(weekday_rent_df['count']):
+for index, row in enumerate(weekday_rent_df['Total_Sewa']):
     axes[2].text(index, row + 1, str(row), ha='center', va='bottom', fontsize=12)
 
 axes[2].set_title('Number of Rents based on Weekday')
