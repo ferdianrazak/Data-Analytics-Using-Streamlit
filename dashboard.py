@@ -104,25 +104,14 @@ order_cuaca = ['Salju Ringan/Hujan', 'Berkabut/Berawan', 'Cerah/Sebagian Berawan
 df['Cuaca'] = pd.Categorical(df['Cuaca'], categories=order_cuaca, ordered=True)
 df = df.sort_values('Cuaca')
 order_cuaca = df.groupby('Cuaca')[['Member', 'Non-member']].sum().reset_index()
-fig, ax = plt.subplots(figsize=(16, 8))
-
-colors=["tab:blue", "tab:orange", "tab:green"]
-
-sns.barplot(
-    x=weather_rent_df.index,
-    y=weather_rent_df['Total_Sewa'],
-    palette=colors,
-    ax=ax
-)
-
-for index, row in enumerate(weather_rent_df['Total_Sewa']):
-    ax.text(index, row + 1, str(row), ha='center', va='bottom', fontsize=12)
-
-ax.set_xlabel(None)
-ax.set_ylabel(None)
-ax.tick_params(axis='x', labelsize=20)
-ax.tick_params(axis='y', labelsize=15)
-st.pyplot(fig)
+plt.figure(figsize=(12,4))
+plt.bar(order_cuaca['Cuaca'], order_cuaca['Member'], label='Member', color='tab:blue')
+plt.bar( order_cuaca['Cuaca'], order_cuaca['Non-member'], label='Non-member', color='tab:orange')
+plt.xlabel("Cuaca")
+plt.ylabel("Total Sewa")
+plt.title("Hubungan antara cuaca dan jumlah sewa")
+plt.legend()
+plt.show()
 
 # Membuat jumlah penyewaan berdasarkan musim
 st.subheader('Seasonly Rentals')
