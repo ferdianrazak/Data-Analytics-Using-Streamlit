@@ -1,9 +1,8 @@
-import streamlit as st
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+import streamlit as st
 
 df = pd.read_csv("D:/Kuliah/Semester 8/submission/dashboard/main_data.csv")
 st.sidebar.title("Information:")
