@@ -182,7 +182,6 @@ sns.barplot(
   x='Hari',
   y='Total_Sewa',
   data=weekday_rent_df,
-  palette=colors3,
   ax=axes[2])
 
 for index, row in enumerate(weekday_rent_df['Total_Sewa']):
