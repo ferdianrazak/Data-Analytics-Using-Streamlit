@@ -62,6 +62,7 @@ start_date, end_date = st.date_input(
         max_value= max_date,
         value=[min_date, max_date]
     )
+
 main_df = df [(df['Tanggal'] >= str(start_date)) & (df['Tanggal'] <= str(end_date))]
 
 # Menyiapkan berbagai dataframe
