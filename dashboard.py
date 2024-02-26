@@ -20,10 +20,10 @@ def def_musim_df(df):
     return musim_df
 def def_bulan_df(df, year):
     df_year = df[df['Tahun'] == year]
-    monthly_rent_df = df_year.groupby(by='Bulan').agg({'Total_Sewa': 'sum'})
+    bulan_df = df_year.groupby(by='Bulan').agg({'Total_Sewa': 'sum'})
     order_bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 
                 'September', 'Oktober', 'November', 'Desember']
-    monthly_rent_df = monthly_rent_df.reindex(order_bulan, fill_value=0)
+    bulan_df = bulan_df.reindex(order_bulan, fill_value=0)
     return bulan_df
 def def_cuaca_df(df):
     order_cuaca = ['Salju Ringan/Hujan', 'Berkabut/Berawan', 'Cerah/Sebagian Berawan']
