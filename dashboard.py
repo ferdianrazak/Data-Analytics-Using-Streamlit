@@ -72,8 +72,7 @@ with st.sidebar:
         value=[min_date, max_date]
     )
 
-main_df = df [(df ['Tanggal'] >= str(start_date)) & 
-                (df ['Tanggal'] <= str(end_date))]
+main_df = df [(df ['Tanggal'] >= str(start_date)) & (df ['Tanggal'] <= str(end_date))]
 
 # Menyiapkan berbagai dataframe
 daily_rent_df = create_daily_rent_df(main_df)
