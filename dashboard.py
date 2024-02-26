@@ -48,7 +48,7 @@ fig, ax = plt.subplots(figsize=(24, 8))
 ax.plot(monthly_rent_df_2011.index, monthly_rent_df_2011['Total_Sewa'],
         marker='o', linewidth=2, color='tab:blue', label='2011')
 ax.plot(monthly_rent_df_2012.index, monthly_rent_df_2012['Total_Sewa'],
-        linewidth=2, color='tab:orange', label='2012')
+        marker='o', linewidth=2, color='tab:orange', label='2012')
 for index, value in enumerate(monthly_rent_df_2011['Total_Sewa']):
     ax.text(index, value, str(value), ha='center', va='bottom', fontsize=12)
     ax.text(index, value, str(value), ha='center', va='bottom', fontsize=12)
