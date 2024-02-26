@@ -19,9 +19,7 @@ def create_daily_rent_df(df):
     return daily_rent_df
 
 def create_daily_casual_rent_df(df):
-    daily_casual_rent_df = df.groupby(by='Tanggal').agg({
-        'Non-member': 'sum'
-    }).reset_index()
+    daily_casual_rent_df = df.groupby(by='Tanggal').agg({'Non-member': 'sum'}).reset_index()
     return daily_casual_rent_df
 
 def create_daily_registered_rent_df(df):
