@@ -98,11 +98,33 @@ ax.tick_params(axis='x', labelsize=25, rotation=45)
 ax.tick_params(axis='y', labelsize=20)
 st.pyplot(fig)
 
-# Membuat jumlah penyewaan berdasarkan season
-st.subheader('Seasonly Rentals')
+# Membuah jumlah penyewaan berdasarkan kondisi cuaca
+st.subheader('Weatherly Rentals')
 order_cuaca = ['Salju Ringan/Hujan', 'Berkabut/Berawan', 'Cerah/Sebagian Berawan']
 df['Cuaca'] = pd.Categorical(df['Cuaca'], categories=order_cuaca, ordered=True)
 df = df.sort_values('Cuaca')
+fig, ax = plt.subplots(figsize=(16, 8))
+
+colors=["tab:blue", "tab:orange", "tab:green"]
+
+sns.barplot(
+    x=weather_rent_df.index,
+    y=weather_rent_df['Total_Sewa'],
+    palette=colors,
+    ax=ax
+)
+
+for index, row in enumerate(weather_rent_df['Total_Sewa']):
+    ax.text(index, row + 1, str(row), ha='center', va='bottom', fontsize=12)
+
+ax.set_xlabel(None)
+ax.set_ylabel(None)
+ax.tick_params(axis='x', labelsize=20)
+ax.tick_params(axis='y', labelsize=15)
+st.pyplot(fig)
+
+# Membuat jumlah penyewaan berdasarkan musim
+st.subheader('Seasonly Rentals')
 fig, ax = plt.subplots(figsize=(16, 8))
 
 sns.barplot(
@@ -130,29 +152,6 @@ ax.set_ylabel(None)
 ax.tick_params(axis='x', labelsize=20, rotation=0)
 ax.tick_params(axis='y', labelsize=15)
 ax.legend()
-st.pyplot(fig)
-
-# Membuah jumlah penyewaan berdasarkan kondisi cuaca
-st.subheader('Weatherly Rentals')
-
-fig, ax = plt.subplots(figsize=(16, 8))
-
-colors=["tab:blue", "tab:orange", "tab:green"]
-
-sns.barplot(
-    x=weather_rent_df.index,
-    y=weather_rent_df['Total_Sewa'],
-    palette=colors,
-    ax=ax
-)
-
-for index, row in enumerate(weather_rent_df['Total_Sewa']):
-    ax.text(index, row + 1, str(row), ha='center', va='bottom', fontsize=12)
-
-ax.set_xlabel(None)
-ax.set_ylabel(None)
-ax.tick_params(axis='x', labelsize=20)
-ax.tick_params(axis='y', labelsize=15)
 st.pyplot(fig)
 
 st.caption('Copyright (c) Ferdian Razak 2024')
