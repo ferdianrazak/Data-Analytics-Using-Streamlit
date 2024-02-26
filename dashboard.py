@@ -99,49 +99,38 @@ ax.tick_params(axis='y', labelsize=20)
 st.pyplot(fig)
 
 # Membuah jumlah penyewaan berdasarkan kondisi cuaca
-st.subheader('Weatherly Rentals')
-fig1 = px.bar(seasonly_users_df,
-              x='Cuaca',
-              y=['Salju Ringan/Hujan', 'Berkabut/Berawan', 'Cerah/Sebagian Berawan'],
-              color='type_of_rides',
-              color_discrete_sequence=["skyblue", "orange", "red"],
-              title='Count of bikeshare rides by season').update_layout(xaxis_title='', yaxis_title='Total Rides')
-
-order_cuaca = ['Salju Ringan/Hujan', 'Berkabut/Berawan', 'Cerah/Sebagian Berawan']
-df['Cuaca'] = pd.Categorical(df['Cuaca'], categories=order_cuaca, ordered=True)
-df = df.sort_values('Cuaca')
-order_cuaca = df.groupby('Cuaca')[['Member', 'Non-member']].sum().reset_index()
-plt.figure(figsize=(12,4))
-plt.bar(order_cuaca['Cuaca'], order_cuaca['Member'], label='Member', color='tab:blue')
-plt.bar( order_cuaca['Cuaca'], order_cuaca['Non-member'], label='Non-member', color='tab:orange')
-plt.xlabel("Cuaca")
-plt.ylabel("Total Sewa")
-plt.title("Hubungan antara cuaca dan jumlah sewa")
-plt.legend()
-plt.show()
-
+st.subheader('Jumlah sewa berkaitan dengan cuaca')
 fig, ax = plt.subplots(figsize=(16, 8))
 
-colors=["tab:blue", "tab:orange", "tab:green"]
-
 sns.barplot(
-    x=weather_rent_df.index,
-    y=weather_rent_df['Total_Sewa'],
-    palette=colors,
+    x='Cuaca',
+    y='Member',
+    data=season_rent_df,
+    label='Member',
     ax=ax
 )
 
-for index, row in enumerate(weather_rent_df['Total_Sewa']):
-    ax.text(index, row + 1, str(row), ha='center', va='bottom', fontsize=12)
+sns.barplot(
+    x='Cuaca',
+    y='Non-member',
+    data=season_rent_df,
+    label='Non-member',
+    ax=ax
+)
+
+for index, row in season_rent_df.iterrows():
+    ax.text(index, row['Member'], str(row['Member']), ha='center', va='bottom', fontsize=12)
+    ax.text(index, row['Non-member'], str(row['Non-member']), ha='center', va='bottom', fontsize=12)
 
 ax.set_xlabel(None)
 ax.set_ylabel(None)
-ax.tick_params(axis='x', labelsize=20)
+ax.tick_params(axis='x', labelsize=20, rotation=0)
 ax.tick_params(axis='y', labelsize=15)
+ax.legend()
 st.pyplot(fig)
 
 # Membuat jumlah penyewaan berdasarkan musim
-st.subheader('Seasonly Rentals')
+st.subheader('Jumlah sewa berkaitan dengan musim')
 fig, ax = plt.subplots(figsize=(16, 8))
 
 sns.barplot(
