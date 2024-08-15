@@ -20,58 +20,46 @@ st.sidebar.markdown("**• Nama: Ferdian Razak**")
 st.sidebar.markdown("**• Email: [ferdianrazak77@gmail.com](mailto:ferdianrazak77@gmail.com)**")
 st.sidebar.markdown("**• Dicoding: [Profile](https://www.dicoding.com/users/ferdianrazak/)**")
 
-# Define functions to process data
-def season_data(df):
-    order_season = ['Semi', 'Dingin', 'Panas', 'Gugur']
-    df['Musim'] = pd.Categorical(df['Musim'], categories=order_season, ordered=True)
-    return df.groupby('Musim')[['Member', 'Non-member']].sum().reset_index()
+# Custom CSS to improve the look and feel of the dashboard
+st.markdown("""
+<style>
+.big-font {
+    font-size:20px !important;
+    font-weight: bold !important;
+}
+.metric-box {
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid #eee;
+    margin: 10px;
+}
+</style>
+""", unsafe_allow_html=True)
 
-def monthly_data(df, year):
-    df_year = df[df['Tahun'] == year]
-    order_month = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                   'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
-    monthly_df = df_year.groupby('Bulan').agg({'Total_Sewa': 'sum'})
-    return monthly_df.reindex(order_month, fill_value=0)
+# Metric Cards
+col1, col2, col3, col4 = st.columns(4)
+col1.metric("Total Accounts Receivable", "$6,621,280", "1.8%")
+col2.metric("Total Accounts Payable", "$1,630,270", "-0.9%")
+col3.metric("Equity Ratio", "75.38%", "0.5%")
+col4.metric("Debt Equity", "1.10%", "-0.1%")
 
-def weather_data(df):
-    order_weather = ['Salju Ringan/Hujan', 'Berkabut/Berawan', 'Cerah/Sebagian Berawan']
-    df['Cuaca'] = pd.Categorical(df['Cuaca'], categories=order_weather, ordered=True)
-    return df.groupby('Cuaca')[['Member', 'Non-member']].sum().reset_index()
+# Data Analysis Sections
+with st.expander("Financial Ratios Analysis"):
+    st.markdown('<p class="big-font">Financial Ratios</p>', unsafe_allow_html=True)
+    # Add plots and analysis
 
-# User inputs for the date range
-min_date = df['Tanggal'].min().date()
-max_date = df['Tanggal'].max().date()
-start_date, end_date = st.date_input("Waktu Data", [min_date, max_date], min_value=min_date, max_value=max_date)
+with st.expander("Revenue and Profit Summary"):
+    st.markdown('<p class="big-font">Monthly Revenue and Profit</p>', unsafe_allow_html=True)
+    # Plot for revenue and profits
+    fig, ax = plt.subplots(figsize=(10, 5))
+    sns.lineplot(data=df, x='Month', y='Revenue', ax=ax, label='Revenue')
+    sns.lineplot(data=df, x='Month', y='Profit', ax=ax, label='Profit')
+    st.pyplot(fig)
 
-filtered_df = df[(df['Tanggal'].dt.date >= start_date) & (df['Tanggal'].dt.date <= end_date)]
+# Interactive Plots with Plotly
+st.subheader('Interactive Analysis of Data')
+fig = px.bar(df, x='Month', y='Profit', color='Year', title='Profit by Month and Year')
+st.plotly_chart(fig, use_container_width=True)
 
-# Dataframes for different analyses
-season_df = season_data(filtered_df)
-weather_df = weather_data(filtered_df)
-monthly_2011_df = monthly_data(df, 2011)
-monthly_2012_df = monthly_data(df, 2012)
-
-# Plotting
-st.header('Final Project Data Analytics - Bike Sharing Dataset')
-
-# Monthly trends by year
-st.subheader('Tren jumlah pengguna per bulan pada 2011 dan 2012')
-fig = px.line(x=monthly_2011_df.index, y=monthly_2011_df['Total_Sewa'], labels={'x': 'Month', 'y': 'Total Rentals'},
-              title='Monthly Trends for 2011')
-fig.add_scatter(x=monthly_2012_df.index, y=monthly_2012_df['Total_Sewa'], name='2012')
-st.plotly_chart(fig)
-
-# Rentals by weather condition
-st.subheader('Jumlah sewa berkaitan dengan cuaca')
-fig = px.bar(weather_df, x='Cuaca', y=['Member', 'Non-member'],
-             title='Rentals by Weather Condition', barmode='group')
-st.plotly_chart(fig)
-
-# Rentals by season
-st.subheader('Jumlah sewa berkaitan dengan musim')
-fig = px.bar(season_df, x='Musim', y=['Member', 'Non-member'],
-             title='Rentals by Season', barmode='group')
-st.plotly_chart(fig)
-
-# Copyright notice
-st.caption('Copyright (c) Ferdian Razak 2024')
+# Footer
+st.markdown('<p class="big-font">Dashboard by Ferdian Razak</p>', unsafe_allow_html=True)
