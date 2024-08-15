@@ -3,63 +3,87 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
-import plotly.express as px
 
-# Load data with caching to improve performance
-@st.cache
-def load_data(url):
-    data = pd.read_csv(url)
-    data['Tanggal'] = pd.to_datetime(data['Tanggal'])
-    return data
+df = pd.read_csv("https://raw.githubusercontent.com/ferdianrazak/dashboard/main/dashboard/main_data.csv")
 
-df = load_data("https://raw.githubusercontent.com/ferdianrazak/dashboard/main/dashboard/main_data.csv")
-
-# Sidebar details
 st.sidebar.title("Peneliti:")
 st.sidebar.markdown("**• Nama: Ferdian Razak**")
-st.sidebar.markdown("**• Email: [ferdianrazak77@gmail.com](mailto:ferdianrazak77@gmail.com)**")
-st.sidebar.markdown("**• Dicoding: [Profile](https://www.dicoding.com/users/ferdianrazak/)**")
+st.sidebar.markdown(
+    "**• Email: [ferdianrazak77@gmail.com](ferdianrazak77@gmail.com)**")
+st.sidebar.markdown(
+    "**• Dicoding: [ferdianrazak](https://www.dicoding.com/users/ferdianrazak/)**")
 
-# Custom CSS to improve the look and feel of the dashboard
-st.markdown("""
-<style>
-.big-font {
-    font-size:20px !important;
-    font-weight: bold !important;
-}
-.metric-box {
-    padding: 10px;
-    border-radius: 5px;
-    border: 2px solid #eee;
-    margin: 10px;
-}
-</style>
-""", unsafe_allow_html=True)
+def def_musim_df(df):
+    order_musim = ['Semi', 'Dingin', 'Panas', 'Gugur']
+    df['Musim'] = pd.Categorical(df['Musim'], categories=order_musim, ordered=True)
+    musim_df = df.groupby(by='Musim')[['Member', 'Non-member']].sum().reset_index()
+    return musim_df
+def def_bulan_df(df, year):
+    df_year = df[df['Tahun'] == year]
+    bulan_df = df_year.groupby(by='Bulan').agg({'Total_Sewa': 'sum'})
+    order_bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 
+                'September', 'Oktober', 'November', 'Desember']
+    bulan_df = bulan_df.reindex(order_bulan, fill_value=0)
+    return bulan_df
+def def_cuaca_df(df):
+    order_cuaca = ['Salju Ringan/Hujan', 'Berkabut/Berawan', 'Cerah/Sebagian Berawan']
+    df['Cuaca'] = pd.Categorical(df['Cuaca'], categories=order_cuaca, ordered=True)
+    cuaca_df = df.groupby(by='Cuaca')[['Member', 'Non-member']].sum().reset_index()
+    return cuaca_df
+   
+min_date = pd.to_datetime(df ['Tanggal']).dt.date.min()
+max_date = pd.to_datetime(df ['Tanggal']).dt.date.max()
+start_date, end_date = st.date_input(label='Waktu Data', min_value= min_date,
+                                     max_value= max_date, value=[min_date, max_date])
+main_df = df [(df['Tanggal'] >= str(start_date)) & (df['Tanggal'] <= str(end_date))]
 
-# Metric Cards
-col1, col2, col3, col4 = st.columns(4)
-col1.metric("Total Accounts Receivable", "$6,621,280", "1.8%")
-col2.metric("Total Accounts Payable", "$1,630,270", "-0.9%")
-col3.metric("Equity Ratio", "75.38%", "0.5%")
-col4.metric("Debt Equity", "1.10%", "-0.1%")
+musim_df = def_musim_df(main_df)
+cuaca_df = def_cuaca_df(main_df)
+bulan_2011_df = def_bulan_df(df, 2011)
+bulan_2012_df = def_bulan_df(df, 2012)
 
-# Data Analysis Sections
-with st.expander("Financial Ratios Analysis"):
-    st.markdown('<p class="big-font">Financial Ratios</p>', unsafe_allow_html=True)
-    # Add plots and analysis
+st.header('Final Project Data Analytics - Bike Sharing Dataset')
+st.subheader('Tren jumlah pengguna per bulan pada 2011 dan 2012')
+fig, ax = plt.subplots(figsize=(20, 10))
+ax.plot(bulan_2011_df.index, bulan_2011_df['Total_Sewa'],
+        marker='o', linewidth=4, color='tab:red', label='2011')
+ax.plot(bulan_2012_df.index, bulan_2012_df['Total_Sewa'],
+        marker='o', linewidth=4, color='tab:green', label='2012')
+for index, value in enumerate(bulan_2011_df['Total_Sewa']):
+    ax.text(index, value, str(value), ha='center', va='bottom', fontsize=12)
+for index, value in enumerate(bulan_2012_df['Total_Sewa']):
+    ax.text(index, value, str(value), ha='center', va='bottom', fontsize=12)
+ax.tick_params(axis='x', labelsize=15)
+ax.tick_params(axis='y', labelsize=15)
+ax.legend()
+st.pyplot(fig)
 
-with st.expander("Revenue and Profit Summary"):
-    st.markdown('<p class="big-font">Monthly Revenue and Profit</p>', unsafe_allow_html=True)
-    # Plot for revenue and profits
-    fig, ax = plt.subplots(figsize=(10, 5))
-    sns.lineplot(data=df, x='Month', y='Revenue', ax=ax, label='Revenue')
-    sns.lineplot(data=df, x='Month', y='Profit', ax=ax, label='Profit')
-    st.pyplot(fig)
+st.subheader('Jumlah sewa berkaitan dengan cuaca')
+fig, ax = plt.subplots(figsize=(20, 10))
+sns.barplot(x='Cuaca', y='Member', data=cuaca_df,
+            label='Member', ax=ax)
+sns.barplot(x='Cuaca', y='Non-member', data=cuaca_df,
+            label='Non-member', ax=ax)
+for index, row in cuaca_df.iterrows():
+    ax.text(index, row['Member'], str(row['Member']), ha='center', va='bottom', fontsize=12)
+    ax.text(index, row['Non-member'], str(row['Non-member']), ha='center', va='bottom', fontsize=12)
+ax.tick_params(axis='x', labelsize=15)
+ax.tick_params(axis='y', labelsize=15)
+ax.legend()
+st.pyplot(fig)
 
-# Interactive Plots with Plotly
-st.subheader('Interactive Analysis of Data')
-fig = px.bar(df, x='Month', y='Profit', color='Year', title='Profit by Month and Year')
-st.plotly_chart(fig, use_container_width=True)
+st.subheader('Jumlah sewa berkaitan dengan musim')
+fig, ax = plt.subplots(figsize=(20, 10))
+sns.barplot(x='Musim', y='Member', data=musim_df,
+            label='Member', ax=ax)
+sns.barplot(x='Musim', y='Non-member', data=musim_df,
+            label='Non-member', ax=ax)
+for index, row in musim_df.iterrows():
+    ax.text(index, row['Member'], str(row['Member']), ha='center', va='bottom', fontsize=12)
+    ax.text(index, row['Non-member'], str(row['Non-member']), ha='center', va='bottom', fontsize=12)
+ax.tick_params(axis='x', labelsize=15)
+ax.tick_params(axis='y', labelsize=15)
+ax.legend()
+st.pyplot(fig)
 
-# Footer
-st.markdown('<p class="big-font">Dashboard by Ferdian Razak</p>', unsafe_allow_html=True)
+st.caption('Copyright (c) Ferdian Razak 2024')
